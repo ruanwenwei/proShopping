@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        main {
+            border: 1px dashed #cccccc;
+            width: 400px;
+            height: 400px;
+            color: #cccccc;
+            font-size: 35px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            background-color: orange;
+            color: white;
+            border-radius: 10px;
+            padding: 5px;
+            margin-top: 10px;
+            font-size: 25px
+        }
+
+        img {
+            width: 100px;
+            height: 100px;
+        }
+    </style>
+</head>
+
+<body>
+    <main><span>拖拽图片到这里</span></main>
+    <button>上 传</button>
+    <script src="./jquery-3.3.1.js"></script>
+    <script>
+        // 创建一个数组存放图片
+        var files = [];
+        $('main').on({
+            dragover: function () {
+                return false;
+            },
+            drop: function (event) {
+                // 凡事拖拽事件都有自带的默认事件
+                event.preventDefault();
+                $('span').remove();
+                // 获取图片路径
+                // event，若是使用jq的方式，那么此时的event是经过jq封装后的
+                // 所以不能像原生js一样直接通过dataTransfer获取图片路径
+
+                // 获取原生DragEvent
+                console.log(event.originalEvent);
+                files = event.originalEvent.dataTransfer.files;
+                console.log(files);
+                $(files).each(function (index, item) {
+                    if (item.type.startsWith('image')) {
+                        $('main').append(`<img src="${URL.createObjectURL(item)}">`)
+                    } else {
+                        alert('请拖拽正确的一张图片')
+                    }
+
+                })
+
+            }
+        })
+    </script>
+
+</body>
+
+</html>
